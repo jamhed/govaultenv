@@ -1,0 +1,13 @@
+builds:
+  -
+    goos:
+      - linux
+      - darwin
+      - freebsd
+      - windows
+brews:
+  -
+    github:
+      owner: jamhed
+      name: homebrew-core
+    folder: Formula
