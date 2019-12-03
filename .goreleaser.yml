@@ -9,5 +9,5 @@ brews:
   -
     github:
       owner: jamhed
-      name: homebrew-core
+      name: govaultenv
     folder: Formula
