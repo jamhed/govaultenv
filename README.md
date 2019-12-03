@@ -2,6 +2,16 @@
 
 Expose vault secrets as environment variables in newly spawned process.
 
+## Motivation
+
+Secrets are frequently poorly maintained (never rotated, copied across developers and environemtns, etc, etc), so the intent of this utility is to simplify secrets handling using vault
+as primary and the only secrets storage.
+
+There are two primary use cases:
+
+1. Securily provide an environment for ops and devs
+2. Provide secrets to kubernetes applications
+
 ## Usage
 
 ```sh
@@ -19,7 +29,7 @@ govaultenv -verbose=debug /bin/bash
 ## How to install on Mac
 
 ```sh
-brew tap jamhed/core https://github.com/jamhed/homebrew-core
+brew tap jamhed/govaultenv https://github.com/jamhed/govaultenv
 brew install govaultenv
 ```
 
@@ -65,7 +75,7 @@ Here wrapped token can be used only once, has limited time-to-live (one hour), a
 
 ## How to verify it
 
-Have `govaultenv` binary installed locally, have `VAULT_ADDR` and `VAULT_TOKEN` environment variables set, and expose some vault secret, e.g. `VAULT_SOLR_PASS=team/solr#solr_pass`, and then:
+Have `govaultenv` binary installed locally, have `VAULT_ADDR` and `VAULT_TOKEN` environment variables set, and expose some vault secret, e.g. `VAULT_SOLR_PASS=team/solr#pass`, and then:
 
 ```sh
 govaultenv -append=false env
@@ -86,18 +96,18 @@ kubectl run --generator=run-pod/v1 tmp --rm -i --tty --serviceaccount=vault-auth
 Inside kubernetes pod it's possible to use service account vault authentication schema:
 
 ```sh
-export VAULT_SOLR_PASS=team/solr#solr_pass
+export VAULT_SOLR_PASS=team/solr#pass
 govaultenv -kubeauth default@kubernetes -append=false env
 SOLR_PASS=...
 ```
 
 ## Operations
 
-How to spawn an interactive shell with secret variables pulled out of vault:
+How to spawn an interactive shell with secret variable keys pulled out of vault:
 
 ```sh
-~/src/govaultenv> export VAULT_GOVC=team/env
-~/src/govaultenv> ./govaultenv /bin/bash
+export VAULT_GOVC=team/env
+govaultenv /bin/bash
 ```
 
 ## Related projects
