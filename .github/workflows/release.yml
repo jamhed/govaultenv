@@ -19,6 +19,8 @@ jobs:
       -
         name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v1
+        with:
+          workdir: src
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   build:
