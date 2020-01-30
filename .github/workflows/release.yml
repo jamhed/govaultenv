@@ -1,9 +1,9 @@
 name: release
 
 on:
-  pull_request:
   push:
-
+    tags:
+    - '*'
 jobs:
   goreleaser:
     runs-on: ubuntu-latest
@@ -21,3 +21,14 @@ jobs:
         uses: goreleaser/goreleaser-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Publish to Registry
+      uses: jerray/publish-docker-action@master
+      with:
+        name: jamhed/govaultenv
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        auto_tag: true
