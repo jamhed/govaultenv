@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"os/user"
 	"path"
 	"regexp"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func getToken(vaultToken, vaultTokenPath string) string {
@@ -73,13 +74,14 @@ func main() {
 				continue
 			}
 			log.Debugf("Parsing secret:%s from env:%s%s", envValue, args.vaultPrefix, envName)
+			v.envFilter[env] = true
 			v.ParseSecretPath(envName, envValue)
 		}
 	}
 
 	cmd := exec.Command(args.args[0], args.args[1:]...)
 	if args.appendEnv {
-		cmd.Env = append(os.Environ(), v.env...)
+		cmd.Env = append(v.Filter(os.Environ()), v.env...)
 	} else {
 		cmd.Env = v.env
 	}

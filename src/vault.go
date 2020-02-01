@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/hashicorp/vault/api"
-	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/hashicorp/vault/api"
+	log "github.com/sirupsen/logrus"
 )
 
 type VaultApiInterface interface {
@@ -23,6 +24,7 @@ type Vault struct {
 	upperCase     bool
 	stripName     bool
 	env           []string
+	envFilter     map[string]bool
 	file          []string
 }
 
@@ -38,6 +40,7 @@ func NewVault(addr string, upperCase, stripName bool) *Vault {
 	v.addr = addr
 	v.file = make([]string, 0)
 	v.env = make([]string, 0)
+	v.envFilter = make(map[string]bool)
 	v.api = new(VaultApi)
 	return v
 }
@@ -64,6 +67,15 @@ func (v *Vault) SetToken(unwrap bool, token string) {
 		os.Exit(1)
 	}
 	v.api.Client().SetToken(re.Auth.ClientToken)
+}
+
+func (v *Vault) Filter(envs []string) (re []string) {
+	for _, env := range envs {
+		if !v.envFilter[env] {
+			re = append(re, env)
+		}
+	}
+	return
 }
 
 func (v *Vault) GetValue(path string, key string) interface{} {
