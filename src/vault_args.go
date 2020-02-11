@@ -3,8 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"os"
+
+	log "github.com/sirupsen/logrus"
 )
 
 // Default is `-s -w -X main.version={{.Version}} -X main.commit={{.ShortCommit}} -X main.date={{.Date}} -X main.builtBy=goreleaser`.
@@ -32,18 +33,34 @@ func NewArgs() *VaultArgs {
 	return new(VaultArgs)
 }
 
+func env(name, def string) string {
+	if value, ok := os.LookupEnv(name); ok {
+		return value
+	}
+	return def
+}
+
+func envb(name string, def bool) bool {
+	if value, ok := os.LookupEnv(name); ok && value == "true" {
+		return true
+	}
+	return def
+}
+
+const tokenPath = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+
 func (a *VaultArgs) Parse() *VaultArgs {
-	flag.StringVar(&a.verboseLevel, "verbose", "info", "Set verbosity level")
-	flag.StringVar(&a.kubeAuth, "kubeauth", "", "Authenticate with kubernetes, format: role@authengine")
-	flag.StringVar(&a.kubeTokenPath, "kubetokenpath", "/var/run/secrets/kubernetes.io/serviceaccount/token", "Kubernetes service account token path")
-	flag.StringVar(&a.vaultAddr, "addr", os.Getenv("VAULT_ADDR"), "Vault address")
-	flag.StringVar(&a.vaultToken, "token", "", "Vault token")
-	flag.StringVar(&a.vaultTokenPath, "tokenpath", "", "Vault token path")
-	flag.StringVar(&a.vaultPrefix, "prefix", "VAULT_", "Environment variable prefix")
-	flag.BoolVar(&a.appendEnv, "append", true, "Append vault vaulues to os environment")
-	flag.BoolVar(&a.upperCase, "uppercase", true, "Convert environment variables to upper-case")
-	flag.BoolVar(&a.unwrap, "unwrap", false, "Unwrap token (if provided)")
-	flag.BoolVar(&a.stripName, "stripname", false, "Strip holding environment variable name")
+	flag.StringVar(&a.verboseLevel, "verbose", env("VERBOSE", "info"), "Set verbosity level")
+	flag.StringVar(&a.kubeAuth, "kubeauth", env("KUBEAUTH", ""), "Authenticate with kubernetes, format: role@authengine")
+	flag.StringVar(&a.kubeTokenPath, "kubetokenpath", env("KUBETOKENPATH", tokenPath), "Kubernetes service account token path")
+	flag.StringVar(&a.vaultAddr, "addr", env("VAULT_ADDR", ""), "Vault address")
+	flag.StringVar(&a.vaultToken, "token", env("VAULT_TOKEN", ""), "Vault token")
+	flag.StringVar(&a.vaultTokenPath, "tokenpath", env("VAULT_TOKEN_PATH", ""), "Vault token path")
+	flag.StringVar(&a.vaultPrefix, "prefix", env("VAULT_PREFIX", "VAULT_"), "Environment variable prefix")
+	flag.BoolVar(&a.appendEnv, "append", envb("APPEND", true), "Append vault values to os environment")
+	flag.BoolVar(&a.upperCase, "uppercase", envb("UPPERCASE", true), "Convert environment variables to upper-case")
+	flag.BoolVar(&a.unwrap, "unwrap", envb("UNWRAP", false), "Unwrap token (if provided)")
+	flag.BoolVar(&a.stripName, "stripname", envb("STRIPNAME", false), "Strip holding environment variable name")
 	flag.Parse()
 	a.args = flag.Args()
 	return a
