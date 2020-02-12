@@ -41,8 +41,11 @@ func env(name, def string) string {
 }
 
 func envb(name string, def bool) bool {
-	if value, ok := os.LookupEnv(name); ok && value == "true" {
-		return true
+	if value, ok := os.LookupEnv(name); ok {
+		if value == "true" {
+			return true
+		}
+		return false
 	}
 	return def
 }
