@@ -61,7 +61,7 @@ func (a *VaultArgs) Parse() *VaultArgs {
 	flag.StringVar(&a.vaultTokenPath, "tokenpath", env("VAULT_TOKEN_PATH", ""), "Vault token path")
 	flag.StringVar(&a.vaultPrefix, "prefix", env("VAULT_PREFIX", "VAULT_"), "Environment variable prefix")
 	flag.BoolVar(&a.appendEnv, "append", envb("APPEND", true), "Append vault values to os environment")
-	flag.BoolVar(&a.upperCase, "uppercase", envb("UPPERCASE", true), "Convert environment variables to upper-case")
+	flag.BoolVar(&a.upperCase, "uppercase", envb("UPPERCASE", false), "Convert environment variables to upper-case")
 	flag.BoolVar(&a.unwrap, "unwrap", envb("UNWRAP", false), "Unwrap token (if provided)")
 	flag.BoolVar(&a.stripName, "stripname", envb("STRIPNAME", false), "Strip holding environment variable name")
 	flag.Parse()
