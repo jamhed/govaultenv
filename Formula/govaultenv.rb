@@ -2,16 +2,16 @@
 class Govaultenv < Formula
   desc ""
   homepage ""
-  version "1.0.4"
+  version "1.1.0"
   bottle :unneeded
 
   if OS.mac?
-    url "https://github.com/jamhed/govaultenv/releases/download/v1.0.4/govaultenv_1.0.4_darwin_amd64.tar.gz"
-    sha256 "6d079a6221aa93f0e309caa0f4095dacd80e66af328f7ab8eac63b100dfbf50c"
+    url "https://github.com/jamhed/govaultenv/releases/download/v1.1.0/govaultenv_1.1.0_darwin_amd64.tar.gz"
+    sha256 "5c17368b3fd6ea9a21f52516ad8718e84fbdbe0b7538c4ff2f623a38ab87f6e1"
   elsif OS.linux?
     if Hardware::CPU.intel?
-      url "https://github.com/jamhed/govaultenv/releases/download/v1.0.4/govaultenv_1.0.4_linux_amd64.tar.gz"
-      sha256 "ee9ac86f3137d0082b18747c5b0758f4e5cbe2378fb3c19d74ae629801a7144d"
+      url "https://github.com/jamhed/govaultenv/releases/download/v1.1.0/govaultenv_1.1.0_linux_amd64.tar.gz"
+      sha256 "41062d5d906e00d03e8ca292ff7ecb4a6d8426001391d2cab55c5c1137775b7a"
     end
   end
 
