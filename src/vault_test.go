@@ -2,10 +2,6 @@ package main
 
 import (
 	"github.com/hashicorp/vault/api"
-	"github.com/stretchr/testify/assert"
-	"io/ioutil"
-	"os"
-	"testing"
 )
 
 type VaultMockApi struct {
