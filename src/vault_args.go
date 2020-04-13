@@ -53,6 +53,7 @@ func envb(name string, def bool) bool {
 const tokenPath = "/var/run/secrets/kubernetes.io/serviceaccount/token"
 
 func (a *VaultArgs) Parse() *VaultArgs {
+	var ver bool
 	flag.StringVar(&a.verboseLevel, "verbose", env("VERBOSE", "info"), "Set verbosity level")
 	flag.StringVar(&a.kubeAuth, "kubeauth", env("KUBEAUTH", ""), "Authenticate with kubernetes, format: role@authengine")
 	flag.StringVar(&a.kubeTokenPath, "kubetokenpath", env("KUBETOKENPATH", tokenPath), "Kubernetes service account token path")
@@ -64,8 +65,13 @@ func (a *VaultArgs) Parse() *VaultArgs {
 	flag.BoolVar(&a.upperCase, "uppercase", envb("UPPERCASE", false), "Convert environment variables to upper-case")
 	flag.BoolVar(&a.unwrap, "unwrap", envb("UNWRAP", false), "Unwrap token (if provided)")
 	flag.BoolVar(&a.stripName, "stripname", envb("STRIPNAME", false), "Strip holding environment variable name")
+	flag.BoolVar(&ver, "version", false, "Prints current govaultenv version")
 	flag.Parse()
 	a.args = flag.Args()
+	if ver {
+		fmt.Printf("%s\n", version)
+		os.Exit(0)
+	}
 	return a
 }
 
@@ -87,7 +93,6 @@ func (a *VaultArgs) LogLevel() *VaultArgs {
 func (a *VaultArgs) Validate() *VaultArgs {
 	if len(a.args) == 0 {
 		fmt.Printf("Usage: govaultenv [-h] command [arguments]\n")
-		fmt.Printf("version:%s commit:%s build by:%s date:%s\n", version, commit, builtBy, date)
 		os.Exit(1)
 	}
 	return a
