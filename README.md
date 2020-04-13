@@ -4,12 +4,12 @@ Expose vault secrets as environment variables in newly spawned process.
 
 ## Motivation
 
-Secrets are frequently poorly maintained (never rotated, copied across developers and environemtns, etc, etc), so the intent of this utility is to simplify secrets handling using vault
+Secrets are frequently poorly maintained (never rotated, copied across developers and environments, etc, etc), so the intent of this utility is to simplify secrets handling using vault
 as primary and the only secrets storage.
 
 There are two primary use cases:
 
-1. Securily provide an environment for ops and devs
+1. Securely provide an environment for ops and devs
 2. Provide secrets to kubernetes applications
 
 ## Usage
@@ -37,7 +37,7 @@ brew install govaultenv
 
 Either do:
 
-* `vault login` with one of supported auth schemas (govaultenv tries to read `~/.vault-token` file)
+* `vault login` with one of supported auth schema (govaultenv tries to read `~/.vault-token` file)
 * export `VAULT_TOKEN` environment variable with valid TOKEN
 * provide token value with `-token` command line flag
 * provide kubernetes token and authentication path, see below
@@ -56,7 +56,7 @@ secrets are deleted upon completion of calling program.
 as `VAULT_SOLR=team/solr`, and solr secret has keys `username` and `password`, then following environment variables
 are generated: `SOLR_USERNAME` and `SOLR_PASSWORD`.
 
-There are command-line flags to control this behaviour:
+There are command-line flags to control this behavior:
 
 * `uppercase`, true by default, set it to false to keep generated environment variable name as it is
 * `stripname`, false by default, set it to true to strip the original environment variable name from generated one
