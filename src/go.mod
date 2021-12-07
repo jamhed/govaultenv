@@ -1,6 +1,6 @@
 module govaultenv
 
-go 1.13
+go 1.17
 
 require (
 	github.com/armon/go-metrics v0.3.10 // indirect
