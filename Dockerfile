@@ -1,4 +1,4 @@
-FROM golang:1.13-alpine AS build
+FROM golang:1.17-alpine AS build
 WORKDIR /home
 COPY src src
 RUN cd src && CGO_ENABLED=0 go build -o ../govaultenv
