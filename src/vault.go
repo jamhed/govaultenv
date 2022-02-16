@@ -79,12 +79,20 @@ func (v *Vault) Filter(envs []string) (re []string) {
 }
 
 func (v *Vault) GetValue(path string, key string) interface{} {
-	data := v.api.Get(path)[key]
-	if data == nil {
-		log.Warnf("Empty key:%s value in path:%s", key, path)
+	re := v.api.Get(path)
+	if value, ok := re[key]; ok {
+		return value
+	}
+	if data, ok := re["data"].(map[string]interface{}); ok {
+		if data[key] == nil {
+			log.Warnf("Empty key:%s value in path:%s", key, path)
+			return ""
+		}
+		return data[key]
+	} else {
+		log.Warnf("No data for key:%s value in path:%s", key, path)
 		return ""
 	}
-	return data
 }
 
 func (v *Vault) KubeAuth(role, path string) string {
