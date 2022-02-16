@@ -5,20 +5,20 @@
 class Govaultenv < Formula
   desc ""
   homepage ""
-  version "1.1.7"
+  version "1.2.0"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/jamhed/govaultenv/releases/download/v1.1.7/govaultenv_1.1.7_darwin_arm64.tar.gz"
-      sha256 "d3af6e03ca92ab3fc75539064fd598c0b6ab86c0893780b079fbd3447ec03054"
+      url "https://github.com/jamhed/govaultenv/releases/download/v1.2.0/govaultenv_1.2.0_darwin_arm64.tar.gz"
+      sha256 "61c5f9ba9671bb5268e9180838cf3286916461a9fe4ac785962998bdb9a9919a"
 
       def install
         bin.install "govaultenv"
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/jamhed/govaultenv/releases/download/v1.1.7/govaultenv_1.1.7_darwin_amd64.tar.gz"
-      sha256 "816dd4a64ab3f5517c52f02ed714b132b724fc4dcfa259a5ad0f048465c26ce8"
+      url "https://github.com/jamhed/govaultenv/releases/download/v1.2.0/govaultenv_1.2.0_darwin_amd64.tar.gz"
+      sha256 "c5437bb6b6c3a8965b334fcd606a521d8cff4ce84ce593f80de7898ee3a8b621"
 
       def install
         bin.install "govaultenv"
@@ -27,17 +27,17 @@ class Govaultenv < Formula
   end
 
   on_linux do
-    if Hardware::CPU.intel?
-      url "https://github.com/jamhed/govaultenv/releases/download/v1.1.7/govaultenv_1.1.7_linux_amd64.tar.gz"
-      sha256 "ce79339896e830bd04de420c6d01e52aa0596dc7bea5b40859aea68efc4a4977"
+    if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
+      url "https://github.com/jamhed/govaultenv/releases/download/v1.2.0/govaultenv_1.2.0_linux_arm64.tar.gz"
+      sha256 "500d906146d848157b101895eef908bb6be0d4ad29255967bba0bd91fbc5b897"
 
       def install
         bin.install "govaultenv"
       end
     end
-    if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/jamhed/govaultenv/releases/download/v1.1.7/govaultenv_1.1.7_linux_arm64.tar.gz"
-      sha256 "f2921afbb049b51b0dab188682ec30d0c5c27ec8f373f17cd79b492fd50eca3b"
+    if Hardware::CPU.intel?
+      url "https://github.com/jamhed/govaultenv/releases/download/v1.2.0/govaultenv_1.2.0_linux_amd64.tar.gz"
+      sha256 "561ef5c76df6f34b629249d00abe0829625714dbe4b494edefaf16247eba502e"
 
       def install
         bin.install "govaultenv"
