@@ -5,7 +5,7 @@ builds:
     - freebsd
     - windows
 brews:
-- github:
+- tap:
     owner: jamhed
-    repository: govaultenv
+    name: govaultenv
   folder: Formula
