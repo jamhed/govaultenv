@@ -44,6 +44,15 @@ func getToken(vaultToken, vaultTokenPath string) string {
 	return ""
 }
 
+func stringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
+}
+
 func main() {
 	args := NewArgs().Parse().Validate().LogLevel()
 
@@ -65,11 +74,15 @@ func main() {
 		v.SetToken(args.unwrap, getToken(args.vaultToken, args.vaultTokenPath))
 	}
 
+	vaultVars := []string{"ADDR", "TOKEN", "CACERT", "CAPATH", "CLIENT_CERT",
+		"CLIENT_KEY", "CLIENT_TIMEOUT", "CLUSTER_ADDR", "FORMAT", "LICENSE", "LICENSE_PATH", "MAX_RETRIES", "REDIRECT_ADDR",
+		"SKIP_VERIFY", "TLS_SERVER_NAME", "CLI_NO_COLOR", "RATE_LIMIT", "NAMESPACE", "SRV_LOOKUP", "MFA", "HTTP_PROXY"}
+
 	reEnv := regexp.MustCompile(fmt.Sprintf("^%s(.+?)=(.+)$", args.vaultPrefix))
 	for _, env := range os.Environ() {
 		if val := reEnv.FindStringSubmatch(env); len(val) == 3 {
 			envName, envValue := val[1], val[2]
-			if args.vaultPrefix == "VAULT_" && (envName == "ADDR" || envName == "TOKEN") {
+			if args.vaultPrefix == "VAULT_" && stringInSlice(envName, vaultVars) {
 				log.Debugf("Skipping env variable name:%s%s", args.vaultPrefix, envName)
 				continue
 			}

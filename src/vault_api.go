@@ -19,6 +19,9 @@ func (v *VaultApi) Get(path string) VaultData {
 		log.Warnf("No data for secret, path:%s", path)
 		return make(VaultData)
 	}
+	if data, ok := re.Data["data"].(map[string]interface{}); ok {
+		return data
+	}
 	return re.Data
 }
 
