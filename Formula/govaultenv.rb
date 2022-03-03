@@ -5,20 +5,20 @@
 class Govaultenv < Formula
   desc ""
   homepage ""
-  version "1.2.2"
+  version "1.2.3"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/jamhed/govaultenv/releases/download/v1.2.2/govaultenv_1.2.2_darwin_amd64.tar.gz"
-      sha256 "bc678eb25f75f138a65c50966e91741cf799592bf1598b5a6a1f6153d23448d4"
+      url "https://github.com/jamhed/govaultenv/releases/download/v1.2.3/govaultenv_1.2.3_darwin_amd64.tar.gz"
+      sha256 "4c58d80bc71d20692142996b5b699f5adfd433bffc658ae872c23ac03bd36312"
 
       def install
         bin.install "govaultenv"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/jamhed/govaultenv/releases/download/v1.2.2/govaultenv_1.2.2_darwin_arm64.tar.gz"
-      sha256 "6f39dc5174a5657425bbb3e0100db1bda109a77dcdbeacd8a50463db09777410"
+      url "https://github.com/jamhed/govaultenv/releases/download/v1.2.3/govaultenv_1.2.3_darwin_arm64.tar.gz"
+      sha256 "801044a22c8bf7d33c4a7bb7209d55cf69147e2b27c5e64a0da6aa88fe2f07be"
 
       def install
         bin.install "govaultenv"
@@ -28,16 +28,16 @@ class Govaultenv < Formula
 
   on_linux do
     if Hardware::CPU.intel?
-      url "https://github.com/jamhed/govaultenv/releases/download/v1.2.2/govaultenv_1.2.2_linux_amd64.tar.gz"
-      sha256 "91f1cc7cb109a48c90ad369520178af7d7f84935521f120f4ab2d21802afed7a"
+      url "https://github.com/jamhed/govaultenv/releases/download/v1.2.3/govaultenv_1.2.3_linux_amd64.tar.gz"
+      sha256 "5bb97f7988fe0848e0730111635db5a7a8a4f874b78e24058ca527103de02795"
 
       def install
         bin.install "govaultenv"
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/jamhed/govaultenv/releases/download/v1.2.2/govaultenv_1.2.2_linux_arm64.tar.gz"
-      sha256 "4ac2fab2347eed7b227d8b6734cc3f778537f9058d5f8602bf94eb4be82c1610"
+      url "https://github.com/jamhed/govaultenv/releases/download/v1.2.3/govaultenv_1.2.3_linux_arm64.tar.gz"
+      sha256 "9515eb3c3b818641a48ebce47bcb959ce39e35d82478aaae6a81b68a5d70874a"
 
       def install
         bin.install "govaultenv"
