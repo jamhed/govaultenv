@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"path"
+	"strings"
 
 	"github.com/hashicorp/vault/api"
 	log "github.com/sirupsen/logrus"
@@ -13,22 +13,23 @@ type VaultApi struct {
 }
 
 func path2v2(secretPath string) string {
-	base, secret := path.Split(secretPath)
-	return fmt.Sprintf("%sdata/%s", base, secret)
+	parts := strings.Split(secretPath, "/")
+	return fmt.Sprintf("%s/data/%s", parts[0], strings.Join(parts[1:], "/"))
 }
 
 func (v *VaultApi) Get(path string) VaultData {
 	pathv2 := path2v2(path)
 	re, err := v.client.Logical().Read(pathv2)
 	if err != nil {
-		log.Errorf("Secret:%s, %s", pathv2, err)
+		log.Errorf("Secret:%s, %s", path, err)
 		return make(VaultData)
 	}
 	if re != nil {
 		if data, ok := re.Data["data"].(map[string]interface{}); ok {
 			return data
 		}
-		log.Warnf("No data key for secret:%s", pathv2)
+		log.Warnf("%s %s", pathv2, re)
+		log.Warnf("No data key for secret:%s", path)
 	}
 	re, err = v.client.Logical().Read(path)
 	if err != nil {
