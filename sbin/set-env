@@ -1,0 +1,36 @@
+#!/bin/bash
+set -a
+ENVNAME=$1
+if [ -z "$ENVNAME" ]; then
+	ls -G -1 ~/env
+	exit 1
+fi
+
+if [ -d ~/env/$ENVNAME ]; then
+	ls -G -1 ~/env/$ENVNAME
+	exit 1
+fi
+
+if [ ! -e ~/env/$ENVNAME ]; then
+	echo "$ENVNAME doesn't exists"
+	exit
+fi
+
+if [ -n "$ENVS" ]; then
+	if [[ $ENVS != *$1* ]]; then
+		PREFIX=$(dirname $1)
+		FILE=$(basename $1)
+		if [[ $ENVS != $PREFIX* ]]; then
+			ENVS="$ENVS $1"
+		else
+			ENVS="$ENVS $FILE"
+		fi
+	fi
+else
+	ENVS="$1"
+fi
+
+ENVSHELL=${ENVSHELL:-"zsh"}
+
+source ~/env/$ENVNAME
+exec govaultenv -stripname=true $ENVSHELL
