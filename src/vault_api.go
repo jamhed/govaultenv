@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"strings"
+	"path"
 
 	"github.com/hashicorp/vault/api"
 	log "github.com/sirupsen/logrus"
@@ -13,8 +13,8 @@ type VaultApi struct {
 }
 
 func path2v2(secretPath string) string {
-	parts := strings.Split(secretPath, "/")
-	return fmt.Sprintf("%s/data/%s", parts[0], strings.Join(parts[1:], "/"))
+	base, secret := path.Split(secretPath)
+	return fmt.Sprintf("%s/data/%s", base, secret)
 }
 
 func (v *VaultApi) Get(path string) VaultData {
