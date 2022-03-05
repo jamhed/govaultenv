@@ -1,9 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"path"
-
 	"github.com/hashicorp/vault/api"
 	log "github.com/sirupsen/logrus"
 )
@@ -12,38 +9,38 @@ type VaultApi struct {
 	client *api.Client
 }
 
-func path2v2(secretPath string) string {
-	base, secret := path.Split(secretPath)
-	return fmt.Sprintf("%s/data/%s", base, secret)
-}
-
 func (v *VaultApi) Get(path string) VaultData {
-	pathv2 := path2v2(path)
-	re, err := v.client.Logical().Read(pathv2)
+	mountPath, v2, err := isKVv2(path, v.client)
 	if err != nil {
-		log.Errorf("Secret:%s, %s", path, err)
+		log.Errorf("%s", err.Error())
 		return make(VaultData)
 	}
-	if re != nil {
-		if data, ok := re.Data["data"].(map[string]interface{}); ok {
+	if v2 {
+		path = addPrefixToKVPath(path, mountPath, "data")
+	}
+	var versionParam map[string]string
+	secret, err := kvReadRequest(v.client, path, versionParam)
+	if err != nil {
+		log.Errorf("path:%s, %s", path, err.Error())
+		if secret != nil {
+			return secret.Data
+		}
+		return make(VaultData)
+	}
+	if secret == nil {
+		log.Warnf("No value found at %s", path)
+		return make(VaultData)
+	}
+	if v2 {
+		if data, ok := secret.Data["data"].(map[string]interface{}); ok && data != nil {
 			return data
+		} else {
+			log.Errorf("No data found at %s", path)
+			return make(VaultData)
 		}
-		log.Warnf("%s %s", pathv2, re)
-		log.Warnf("No data key for secret:%s", path)
+	} else {
+		return secret.Data
 	}
-	re, err = v.client.Logical().Read(path)
-	if err != nil {
-		log.Errorf("Secret:%s, %s", path, err)
-		return make(VaultData)
-	}
-	if re != nil {
-		if len(re.Data) == 0 {
-			log.Warnf("No data for secret:%s", path)
-		}
-		return re.Data
-	}
-	log.Warnf("No data for secret:%s", path)
-	return make(VaultData)
 }
 
 func (v *VaultApi) SetClient(client *api.Client) {
